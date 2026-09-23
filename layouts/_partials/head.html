@@ -1,0 +1,29 @@
+{{- $title := cond .IsHome site.Title (printf "%s — %s" .Title site.Title) -}}
+{{- $description := or .Description .Summary site.Params.description | plainify | chomp -}}
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{{ $title }}</title>
+<meta name="description" content="{{ $description }}" />
+<meta name="author" content="{{ site.Params.author }}" />
+<link rel="canonical" href="{{ .Permalink }}" />
+
+<meta property="og:type" content="{{ cond .IsPage "article" "website" }}" />
+<meta property="og:title" content="{{ $title }}" />
+<meta property="og:description" content="{{ $description }}" />
+<meta property="og:url" content="{{ .Permalink }}" />
+<meta property="og:site_name" content="{{ site.Title }}" />
+<meta name="twitter:card" content="summary" />
+
+{{ with resources.Get "css/main.css" }}
+  {{ $css := . | minify | fingerprint }}
+  <link
+    rel="stylesheet"
+    href="{{ $css.RelPermalink }}"
+    integrity="{{ $css.Data.Integrity }}"
+  />
+{{ end }}
+
+<link
+  rel="icon"
+  href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22><text y=%2213%22 font-family=%22system-ui%22 font-weight=%22600%22 font-size=%2214%22>G</text></svg>"
+/>

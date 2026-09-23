@@ -1,0 +1,36 @@
+baseURL = "https://gunnaraasen.com/"
+locale = "en-US"
+title = "Gunnar Aasen"
+enableRobotsTXT = true
+
+# No blog, so no taxonomies or feeds to generate.
+disableKinds = ["taxonomy", "term", "rss"]
+
+[params]
+  description = "Gunnar Aasen — personal site."
+  author = "Gunnar Aasen"
+
+  # Shown on the home page and in the footer, in this order.
+  [[params.links]]
+    name = "LinkedIn"
+    url = "https://www.linkedin.com/in/gunnaraasen/"
+    rel = "me"
+
+  [[params.links]]
+    name = "GitHub"
+    url = "https://github.com/gunnaraasen"
+    rel = "me"
+
+[menu]
+  [[menu.main]]
+    name = "Projects"
+    pageRef = "/projects"
+    weight = 10
+
+[markup.goldmark.renderer]
+  unsafe = false
+
+[markup.highlight]
+  # Inline styles, so code blocks need no separate Chroma stylesheet.
+  noClasses = true
+  style = "github"
