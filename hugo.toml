@@ -2,35 +2,23 @@ baseURL = "https://gunnaraasen.com/"
 locale = "en-US"
 title = "Gunnar Aasen"
 enableRobotsTXT = true
-
-# No blog, so no taxonomies or feeds to generate.
-disableKinds = ["taxonomy", "term", "rss"]
+disableKinds = ["taxonomy", "term", "section", "rss"]
 
 [params]
-  description = "Gunnar Aasen — personal site."
-  author = "Gunnar Aasen"
+  description = "Gunnar Aasen is a product leader working on cloud infrastructure, data platforms, and security."
 
-  # Shown on the home page and in the footer, in this order.
+  # The "Writing" section. Remove this block to hide it.
+  [params.blog]
+    name = "Turtles Down"
+    url = "https://turtlesdown.dev/"
+    note = "Notes on product, infrastructure, and the layers underneath."
+
+  # The "Elsewhere" section, in the order shown.
   [[params.links]]
     name = "LinkedIn"
-    url = "https://www.linkedin.com/in/gunnaraasen/"
-    rel = "me"
-
+    url = "https://linkedin.com/in/gunnaraasen/"
+    handle = "gunnaraasen"
   [[params.links]]
     name = "GitHub"
-    url = "https://github.com/gunnaraasen"
-    rel = "me"
-
-[menu]
-  [[menu.main]]
-    name = "Projects"
-    pageRef = "/projects"
-    weight = 10
-
-[markup.goldmark.renderer]
-  unsafe = false
-
-[markup.highlight]
-  # Inline styles, so code blocks need no separate Chroma stylesheet.
-  noClasses = true
-  style = "github"
+    url = "https://github.com/gunnaraasen/"
+    handle = "gunnaraasen"

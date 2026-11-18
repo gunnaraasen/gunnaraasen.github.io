@@ -1,6 +1,0 @@
-<footer class="footer">
-  {{ range site.Params.links }}
-    <a href="{{ .url }}"{{ with .rel }} rel="{{ . }}"{{ end }}>{{ .name }}</a>
-  {{ end }}
-  <span class="footer__copy">&copy; {{ now.Year }} {{ site.Params.author }}</span>
-</footer>
