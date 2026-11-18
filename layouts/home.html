@@ -1,15 +1,45 @@
 {{ define "main" }}
-  <section class="intro">
-    <h1>{{ site.Title }}</h1>
-    {{ .Content }}
-    {{ with site.Params.links }}
-      <ul class="links">
-        {{ range . }}
-          <li>
-            <a href="{{ .url }}"{{ with .rel }} rel="{{ . }}"{{ end }}>{{ .name }}</a>
-          </li>
-        {{ end }}
-      </ul>
-    {{ end }}
-  </section>
+<h1 class="name">{{ site.Title }}</h1>
+
+<div class="bio">
+  {{ .Content }}
+</div>
+
+{{- with site.Params.blog }}
+<section class="section" aria-labelledby="writing">
+  <h2 id="writing">Writing</h2>
+  <ul class="links">
+    <li>
+      <a href="{{ .url }}">{{ .name }}</a>
+      {{- with .note }}<span class="links__note">{{ . }}</span>{{ end }}
+    </li>
+  </ul>
+</section>
+{{- end }}
+
+{{- with hugo.Data.projects }}
+<section class="section" aria-labelledby="projects">
+  <h2 id="projects">Projects</h2>
+  <ul class="links">
+    {{- range . }}
+    <li>
+      {{ if .url }}<a href="{{ .url }}">{{ .name }}</a>{{ else }}{{ .name }}{{ end }}
+      {{- with .year }} <span class="links__aside">({{ . }})</span>{{ end }}
+      {{- with .note }}<span class="links__note">{{ . }}</span>{{ end }}
+    </li>
+    {{- end }}
+  </ul>
+</section>
+{{- end }}
+
+{{- with site.Params.links }}
+<section class="section" aria-labelledby="elsewhere">
+  <h2 id="elsewhere">Elsewhere</h2>
+  <ul class="links">
+    {{- range . }}
+    <li><a href="{{ .url }}" rel="me">{{ .name }}</a></li>
+    {{- end }}
+  </ul>
+</section>
+{{- end }}
 {{ end }}

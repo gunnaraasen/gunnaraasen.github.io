@@ -1,67 +1,83 @@
 # gunnaraasen.com
 
-Personal site — a [Hugo](https://gohugo.io) static site published to GitHub
-Pages at <https://gunnaraasen.com>.
+Gunnar Aasen's personal site: a single page built with [Hugo](https://gohugo.io/)
+and published to GitHub Pages at <https://gunnaraasen.com>. No theme; the
+templates and stylesheet live in this repo.
 
-## Local development
+## Edit
+
+| To change              | Edit                                                     |
+| ---------------------- | -------------------------------------------------------- |
+| The bio                | `content/_index.md`                                      |
+| Meta description       | `params.description` in `hugo.toml`                      |
+| The "Writing" section  | `[params.blog]` in `hugo.toml` (delete it to hide)       |
+| The "Elsewhere" links  | `[[params.links]]` in `hugo.toml`                        |
+| Side projects          | `data/projects.yaml` (the section is hidden while empty) |
+| Colors and type        | `assets/css/main.css`                                    |
+| Page structure         | `layouts/home.html`, `layouts/baseof.html`               |
+| `<head>` and metadata  | `layouts/_partials/head.html`                            |
+| The 404 page           | `layouts/404.html`                                       |
+| Favicon                | `static/favicon.svg`                                     |
+| Crawler rules          | `layouts/robots.txt` (a template; adds the sitemap URL)  |
+
+Each entry in `[[params.links]]` is also emitted as a `<link rel="me">` in the
+page head, for profile verification.
+
+### Adding a project
+
+Replace the `[]` in `data/projects.yaml` with a list of entries. Only `name` is
+required; entries render in file order.
+
+```yaml
+- name: Project name
+  url: https://example.com/
+  note: One sentence on what it is.
+  year: 2026
+```
+
+## Preview
 
 ```sh
-hugo server -D      # http://localhost:1313, -D includes drafts
-hugo --gc --minify  # production build into ./public
+hugo server          # http://localhost:1313/
+hugo --gc --minify   # production build into ./public
 ```
 
-Requires Hugo extended ≥ 0.146 (the version pinned in CI is in
-`.github/workflows/deploy.yml`).
+Built with Hugo 0.170.1; the standard edition is enough, since the site uses no
+Sass or image processing. CI pins that version and its checksum in
+`.github/workflows/deploy.yml`.
 
-## Layout
+## Upgrading dependencies
 
-```
-content/_index.md              home page copy
-content/projects/_index.md     projects page intro
-content/projects/<name>.md     one listing entry per project
-static/projects/<name>/        self-contained static projects
-static/CNAME                   custom domain for GitHub Pages
-layouts/                       templates (no external theme)
-assets/css/main.css            all styling
-```
+Every build dependency is pinned in `.github/workflows/deploy.yml`:
 
-## Editing the home page
+- **Hugo**: bump `HUGO_VERSION` and replace `HUGO_SHA256` with the line for
+  `hugo_<version>_linux-amd64.tar.gz` from that release's `checksums.txt`.
+  Update the version above as well.
+- **GitHub Actions**: each `uses:` names a full commit SHA, with its release
+  tag in a comment. To upgrade, replace both:
+  `gh api repos/actions/checkout/commits/<tag> -q .sha`.
+- **Runner image**: `ubuntu-24.04`.
 
-Everything above the links row is the body of `content/_index.md`. The links
-themselves — LinkedIn and GitHub — come from `[[params.links]]` in `hugo.toml`,
-and are also rendered in the footer.
+There are no other build dependencies (no theme, Hugo modules, npm, or
+external scripts). The fonts are vendored in `static/fonts/`.
 
-## Adding a project
+## Publish
 
-Project entries are listing-only: each markdown file supplies a title, year,
-blurb, and a link, but does not render a page of its own. That is what the
-`build.render = never` block does, and it is what keeps the URL
-`/projects/<name>/` free for a static project of the same name.
-
-1. Copy `content/projects/example-project.md` to
-   `content/projects/<name>.md`.
-2. Fill in `title`, `date` (entries sort newest first), `params.year`,
-   `params.link`, and an optional `params.repo`. Write the blurb in the body.
-3. Delete `draft: true`.
-
-`params.link` can be either an external URL or a path within this site.
-
-### Hosting a static project here
-
-Drop the project's files in `static/projects/<name>/` with an `index.html` at
-its root. Hugo copies that tree verbatim, so it is served at
-`https://gunnaraasen.com/projects/<name>/` — point the entry's `params.link` at
-that path. These files bypass Hugo's pipeline entirely: plain HTML, CSS, and JS
-only, with relative asset paths.
-
-## Deployment
-
-Every push to `main` triggers `.github/workflows/deploy.yml`, which builds with
-Hugo and publishes via GitHub Pages. No build output is committed — `public/` is
+Push to `main`. `.github/workflows/deploy.yml` builds the site and deploys it
+to GitHub Pages in about a minute. Build output is not committed; `public/` is
 gitignored.
 
-One-time repository setup: **Settings → Pages → Build and deployment → Source**
-must be set to **GitHub Actions**, and **Settings → Pages → Custom domain** to
-`gunnaraasen.com` with **Enforce HTTPS** enabled. DNS for `gunnaraasen.com`
-needs the four GitHub Pages A records (plus AAAA records for IPv6), and a CNAME
-on `www` pointing to `gunnaraasen.github.io`.
+One-time repository setup:
+
+- **Settings → Pages → Build and deployment → Source**: GitHub Actions.
+- **Settings → Pages → Custom domain**: `gunnaraasen.com`, with **Enforce
+  HTTPS** on. `static/CNAME` holds the same domain.
+- DNS for `gunnaraasen.com`: the four GitHub Pages A records (plus AAAA for
+  IPv6), and a `www` CNAME pointing to `gunnaraasen.github.io`.
+
+## Type
+
+The typeface is [Newsreader](https://github.com/productiontype/Newsreader),
+self-hosted as variable WOFF2 files in `static/fonts/` under the SIL Open Font
+License (`static/fonts/OFL.txt`). Its palette and type are shared with
+[turtlesdown.dev](https://turtlesdown.dev/).
